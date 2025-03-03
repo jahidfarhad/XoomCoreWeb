@@ -70,13 +70,59 @@
 			console.log("Hello World!");
 		});
 
-		$("#newForm").submit(function(e){
+		$("#newForm").submit(async function(e){
 			e.preventDefault();
 			var form = document.getElementById("newForm");
-			 if (!form.checkValidity()) {
-					e.stopPropagation();
-			  } else {
-		  alert("Submitted")};
+			if (!form.checkValidity()) {
+				e.stopPropagation();
+			} 
+			else 
+			{
+
+				let createRequest={
+					FirstName:$("#textFirstName").val(),
+					LastName:$("#textLastName").val(),
+					BirthDate:$("#textBirthDate").val(),
+					Email:$("#textEmail").val(),
+					Phone:$("#numPhone").val(),
+					City:$("#textCity").val()
+				}
+				console.log(createRequest);
+				// Fetch menu data using sendRequest
+				const url = "/CreateEmployeeRequest";
+
+				try {
+
+					const options = {
+						method: "POST",
+						headers: {
+							'Content-Type': 'application/json'
+						}
+					};
+					if (createRequest) {
+						options.body = JSON.stringify(createRequest);
+					}
+					const response = await fetch(url, options);
+
+					if (!response.ok) {
+						throw new Error(`HTTP error! status: ${response.status}`);
+					}
+					const result = await response.json();
+					//return result;
+					console.log("result",result);
+
+					if (!result.isValid) {
+						alert("Error")
+						//showToast(response.responseCode, response.messageType, response.message);
+					}
+					else {
+						alert("Submitted")
+					}
+				} catch (error) {
+					console.error(error);
+				}
+
+			};
 		});
 
 		$("#click_button").click(function(){
