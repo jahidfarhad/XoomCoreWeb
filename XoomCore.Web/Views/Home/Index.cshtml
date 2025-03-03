@@ -1,8 +1,116 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+	ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="#">building Web apps with Xoom Core</a>.</p>
-</div>
+@* <div class="text-center"> *@
+
+@* <h1 class="display-4">Hello World!</h1> *@
+@* <p><a href="#">Learn about building Web apps with Apon</a></p> *@
+
+<form id="newForm" class="g-3 needs-validation" novalidate>
+
+	<div class="col-md-4">
+		<label for="textFirstName" class="form-label">First Name</label>
+		<input type="text" class="form-control" id="textFirstName" required>
+	</div>
+
+	<div class="col-md-4">
+		<label for="textLastName" class="form-label">Last Name</label>
+		<input type="text" class="form-control" id="textLastName" required>
+	</div>
+
+	<div class="col-md-4">
+		<label for="textBirthDate" class="form-label">Date of Birth</label>
+		<input type="date" class="form-control" id="textBirthDate" required>
+	</div>
+
+	<div class="col-md-4">
+		<label for="textEmail" class="form-label">Email</label>
+		<input type="text" class="form-control" id="textEmail" required>
+	</div>
+
+	<div class="col-md-4">
+		<label for="numPhone" class="form-label">Phone</label>
+		<input type="number" class="form-control" id="numPhone" required>
+	</div>
+
+	<div class="col-md-4">
+		<label for="textCity" class="form-label">City</label>
+		<select class="form-select" id="textCity" required>
+			<option selected disabled value="">Choose...</option>
+			<option>Dhaka</option>
+			<option>Chittagon</option>
+			<option>Khulna</option>
+			<option>Rajshahi</option>
+			<option>Sylhet</option>
+		</select>
+		<div class="invalid-feedback">
+			Please select a valid state.
+		</div>
+	</div>
+
+	@* <label for="txtFirstName" class="form-label">First Name</label> *@
+	@* <input id="txtFirstName" class="form-control" required/> *@
+	@* <label for="txtDate" class="form-label">Birth Date</label> *@
+	@* <input id="txtDate" class="form-control" type="date" /> *@
+
+	<br />
+	<div class="col-12">
+		<button id="click_button" class="btn btn-primary" type="submit">Submit Form</button>
+	</div>
+
+	@* <button id="click_btn" class="btn btn-primary">Submit Form</button> *@
+	@* </div> *@
+</form>
+
+@section scripts {
+
+	<script>
+		$(document).ready(function () {
+			console.log("Hello World!");
+		});
+
+		$("#newForm").submit(function(e){
+			e.preventDefault();
+			var form = document.getElementById("newForm");
+			 if (!form.checkValidity()) {
+					e.stopPropagation();
+			  } else {
+		  alert("Submitted")};
+		});
+
+		$("#click_button").click(function(){
+			console.log("Button Clicked");
+
+			let x={
+				FirstName:$("#textFirstName").val(),
+				LastName:$("#textLastName").val(),
+				BirthDate:$("#textBirthDate").val(),
+				Email:$("#textEmail").val(),
+				Phone:$("#numPhone").val(),
+				City:$("#textCity").val()
+			}
+			console.log(x);
+		});
+
+		// Example starter JavaScript for disabling form submissions if there are invalid fields
+		(() => {
+		  'use strict'
+
+		  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+		  const forms = document.querySelectorAll('.needs-validation')
+
+		  // Loop over them and prevent submission
+		  Array.from(forms).forEach(form => {
+			form.addEventListener('submit', event => {
+			  if (!form.checkValidity()) {
+				event.preventDefault()
+				event.stopPropagation()
+			  }
+
+			  form.classList.add('was-validated')
+			}, false)
+		  })
+		})()
+	</script>
+}
