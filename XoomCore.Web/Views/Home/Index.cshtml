@@ -2,66 +2,90 @@
 	ViewData["Title"] = "Home Page";
 }
 
-@* <div class="text-center"> *@
+<button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary" data-mdb-modal-init data-mdb-target="#staticBackdrop2">
+	Register Form
+</button>
 
-@* <h1 class="display-4">Hello World!</h1> *@
-@* <p><a href="#">Learn about building Web apps with Apon</a></p> *@
+<div class="modal fade" id="staticBackdrop2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+	<div class="modal-dialog d-flex justify-content-center">
+		<div class="modal-content w-75">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel2">Sign up</h5>
+				<button type="button" data-mdb-button-init data-mdb-ripple-init class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body p-4">
+				<form>
+					<div data-mdb-input-init class="form-outline mb-4">
+						<input type="text" id="name2" class="form-control" />
+						<label class="form-label" for="name2">Name</label>
+					</div>
 
-<form id="newForm" class="g-3 needs-validation" novalidate>
+					<div data-mdb-input-init class="form-outline mb-4">
+						<input type="email" id="email2" class="form-control" />
+						<label class="form-label" for="email2">Email address</label>
+					</div>
 
-	<div class="col-md-4">
-		<label for="textFirstName" class="form-label">First Name</label>
-		<input type="text" class="form-control" id="textFirstName" required>
-	</div>
+					<div data-mdb-input-init class="form-outline mb-4">
+						<input type="password" id="password2" class="form-control" />
+						<label class="form-label" for="password2">Password</label>
+					</div>
 
-	<div class="col-md-4">
-		<label for="textLastName" class="form-label">Last Name</label>
-		<input type="text" class="form-control" id="textLastName" required>
-	</div>
-
-	<div class="col-md-4">
-		<label for="textBirthDate" class="form-label">Date of Birth</label>
-		<input type="date" class="form-control" id="textBirthDate" required>
-	</div>
-
-	<div class="col-md-4">
-		<label for="textEmail" class="form-label">Email</label>
-		<input type="text" class="form-control" id="textEmail" required>
-	</div>
-
-	<div class="col-md-4">
-		<label for="numPhone" class="form-label">Phone</label>
-		<input type="number" class="form-control" id="numPhone" required>
-	</div>
-
-	<div class="col-md-4">
-		<label for="textCity" class="form-label">City</label>
-		<select class="form-select" id="textCity" required>
-			<option selected disabled value="">Choose...</option>
-			<option>Dhaka</option>
-			<option>Chittagon</option>
-			<option>Khulna</option>
-			<option>Rajshahi</option>
-			<option>Sylhet</option>
-		</select>
-		<div class="invalid-feedback">
-			Please select a valid state.
+					<button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block">Sign up</button>
+				</form>
+			</div>
 		</div>
 	</div>
+</div>
 
-	@* <label for="txtFirstName" class="form-label">First Name</label> *@
-	@* <input id="txtFirstName" class="form-control" required/> *@
-	@* <label for="txtDate" class="form-label">Birth Date</label> *@
-	@* <input id="txtDate" class="form-control" type="date" /> *@
+@* <form id="newForm" class="g-3 needs-validation" novalidate> *@
 
-	<br />
-	<div class="col-12">
-		<button id="click_button" class="btn btn-primary" type="submit">Submit Form</button>
-	</div>
+@* 	<div class="col-md-4"> *@
+@* 		<label for="textFirstName" class="form-label">First Name</label> *@
+@* 		<input type="text" class="form-control" id="textFirstName" required> *@
+@* 	</div> *@
 
-	@* <button id="click_btn" class="btn btn-primary">Submit Form</button> *@
-	@* </div> *@
-</form>
+@* 	<div class="col-md-4"> *@
+@* 		<label for="textLastName" class="form-label">Last Name</label> *@
+@* 		<input type="text" class="form-control" id="textLastName" required> *@
+@* 	</div> *@
+
+@* 	<div class="col-md-4"> *@
+@* 		<label for="textBirthDate" class="form-label">Date of Birth</label> *@
+@* 		<input type="date" class="form-control" id="textBirthDate" required> *@
+@* 	</div> *@
+
+@* 	<div class="col-md-4"> *@
+@* 		<label for="textEmail" class="form-label">Email</label> *@
+@* 		<input type="text" class="form-control" id="textEmail" required> *@
+@* 	</div> *@
+
+@* 	<div class="col-md-4"> *@
+@* 		<label for="numPhone" class="form-label">Phone</label> *@
+@* 		<input type="number" class="form-control" id="numPhone" required> *@
+@* 	</div> *@
+
+@* 	<div class="col-md-4"> *@
+@* 		<label for="textCity" class="form-label">City</label> *@
+@* 		<select class="form-select" id="textCity" required> *@
+@* 			<option selected disabled value="">Choose...</option> *@
+@* 			<option>Dhaka</option> *@
+@* 			<option>Chittagon</option> *@
+@* 			<option>Khulna</option> *@
+@* 			<option>Rajshahi</option> *@
+@* 			<option>Sylhet</option> *@
+@* 		</select> *@
+@* 		<div class="invalid-feedback"> *@
+@* 			Please select a valid state. *@
+@* 		</div> *@
+@* 	</div> *@
+
+@* 	<br /> *@
+
+@* 	<div class="col-12"> *@
+@* 		<button id="click_button" class="btn btn-primary" type="submit">Submit Form</button> *@
+@* 	</div> *@
+
+@* </form> *@
 
 @section scripts {
 
@@ -75,8 +99,8 @@
 			var form = document.getElementById("newForm");
 			if (!form.checkValidity()) {
 				e.stopPropagation();
-			} 
-			else 
+			}
+			else
 			{
 
 				let createRequest={
