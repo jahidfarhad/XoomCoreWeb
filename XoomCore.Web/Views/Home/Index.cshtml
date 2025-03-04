@@ -2,16 +2,16 @@
 	ViewData["Title"] = "Home Page";
 }
 
-<button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary" data-mdb-modal-init data-mdb-target="#staticBackdrop2">
+<button type="button" class="btn btn-primary" id="registerBtn">
 	Register Form
 </button>
 
-<div class="modal fade" id="staticBackdrop2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+<div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog d-flex justify-content-center">
 		<div class="modal-content w-75">
 			<div class="modal-header">
 				<h5 class="modal-title" id="exampleModalLabel2">Sign up</h5>
-				<button type="button" data-mdb-button-init data-mdb-ripple-init class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+				<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close" aria-hidden="true"></button>
 			</div>
 			<div class="modal-body p-4">
 				<form>
@@ -92,6 +92,13 @@
 	<script>
 		$(document).ready(function () {
 			console.log("Hello World!");
+		});
+
+		$("#registerBtn").click(function(e){
+			e.preventDefault();
+
+			$('#registerModal').modal('show')
+
 		});
 
 		$("#newForm").submit(async function(e){
