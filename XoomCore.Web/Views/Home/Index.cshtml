@@ -1,43 +1,117 @@
-﻿@{
+﻿@using XoomCore.Application.RequestModels
+
+@{
 	ViewData["Title"] = "Home Page";
 }
 
-<button type="button" class="btn btn-primary" id="registerBtn">
-	Register Form
+<button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary" id="registerBtn" data-mdb-modal-init data-mdb-target="#registerModal">
+	Registration Form Modal
 </button>
 
 <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog d-flex justify-content-center">
 		<div class="modal-content w-75">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel2">Sign up</h5>
-				<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close" aria-hidden="true"></button>
+				<h5 class="modal-title" id="exampleModalLabel2">Registration Form</h5>
+				<button type="button" data-mdb-button-init data-mdb-ripple-init class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body p-4">
-				<form>
-					<div data-mdb-input-init class="form-outline mb-4">
-						<input type="text" id="name2" class="form-control" />
-						<label class="form-label" for="name2">Name</label>
-					</div>
+				<form id="registrationForm" class="g-3 needs-validation" novalidate>
 
-					<div data-mdb-input-init class="form-outline mb-4">
-						<input type="email" id="email2" class="form-control" />
-						<label class="form-label" for="email2">Email address</label>
-					</div>
+					<div class="form-outline mb-3">
+				 		<label for="textFirstName" class="form-label">First Name</label>
+				 		<input type="text" class="form-control" id="textFirstName" required>
+				 	</div>
 
-					<div data-mdb-input-init class="form-outline mb-4">
-						<input type="password" id="password2" class="form-control" />
-						<label class="form-label" for="password2">Password</label>
-					</div>
+					<div class="form-outline mb-3">
+				 		<label for="textLastName" class="form-label">Last Name</label>
+				 		<input type="text" class="form-control" id="textLastName" required>
+				 	</div>
 
-					<button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block">Sign up</button>
-				</form>
+					<div class="form-outline mb-3">
+				 		<label for="textBirthDate" class="form-label">Date of Birth</label>
+				 		<input type="date" class="form-control" id="textBirthDate" required>
+				 	</div>
+
+					<div class="form-outline mb-3">
+				 		<label for="textEmail" class="form-label">Email</label>
+				 		<input type="text" class="form-control" id="textEmail" required>
+				 	</div>
+
+					<div class="form-outline mb-3">
+				 		<label for="numPhone" class="form-label">Phone</label>
+				 		<input type="number" class="form-control" id="numPhone" required>
+				 	</div>
+
+					<div class="form-outline mb-3">
+				 		<label for="textCity" class="form-label">City</label>
+				 		<select class="form-select" id="textCity" required>
+				 			<option selected disabled value="">Choose...</option>
+				 			<option>Dhaka</option>
+				 			<option>Chittagon</option>
+				 			<option>Khulna</option>
+				 			<option>Rajshahi</option>
+				 			<option>Sylhet</option>
+				 		</select>
+				 		@*<div class="invalid-feedback">
+				 			Please select a valid state
+				 		</div>*@
+				 	</div>
+
+				 	<br />
+
+				 	<div class="col-12">
+				 		<button id="click_button" class="btn btn-primary" type="submit">Submit Form</button>
+				 	</div>
+
+				 </form>
 			</div>
 		</div>
 	</div>
 </div>
 
-@* <form id="newForm" class="g-3 needs-validation" novalidate> *@
+@model List<MyModel>
+
+@* <!DOCTYPE html> *@
+@* <html lang="en"> *@
+@* <head> *@
+@* 	<meta charset="UTF-8"> *@
+@* 	<meta name="viewport" content="width=device-width, initial-scale=1.0"> *@
+@* 	<title>Bootstrap Table Example</title> *@
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+@* </head> *@
+@* <body> *@
+	<div class="container">
+		<h2 class="my-4">User Data</h2>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Name</th>
+					<th>Age</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in Model)
+				{
+					<tr>
+						<td>@item.Id</td>
+						<td>@item.Name</td>
+						<td>@item.Age</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+@* </body> *@
+@* </html> *@
+
+
+@* <form id="registrationForm" class="g-3 needs-validation" novalidate> *@
 
 @* 	<div class="col-md-4"> *@
 @* 		<label for="textFirstName" class="form-label">First Name</label> *@
@@ -101,9 +175,9 @@
 
 		});
 
-		$("#newForm").submit(async function(e){
+		$("#registrationForm").submit(async function(e){
 			e.preventDefault();
-			var form = document.getElementById("newForm");
+			var form = document.getElementById("registrationForm");
 			if (!form.checkValidity()) {
 				e.stopPropagation();
 			}
@@ -159,7 +233,7 @@
 		$("#click_button").click(function(){
 			console.log("Button Clicked");
 
-			let x={
+			let showInfo={
 				FirstName:$("#textFirstName").val(),
 				LastName:$("#textLastName").val(),
 				BirthDate:$("#textBirthDate").val(),
@@ -167,7 +241,7 @@
 				Phone:$("#numPhone").val(),
 				City:$("#textCity").val()
 			}
-			console.log(x);
+			console.log(showInfo);
 		});
 
 		// Example starter JavaScript for disabling form submissions if there are invalid fields

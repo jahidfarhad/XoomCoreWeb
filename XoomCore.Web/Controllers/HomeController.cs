@@ -21,7 +21,15 @@ public class HomeController : Controller
     //[MustHavePermission(SubMenuKey: "Home", Controller: "Home", Action: "Index")]
     public IActionResult Index()
     {
-        return View();
+        var data = new List<MyModel>
+        {
+            new MyModel { Id = 1, Name = "John Doe", Age = 30 },
+            new MyModel { Id = 2, Name = "Jane Smith", Age = 25 },
+            new MyModel { Id = 3, Name = "Sam Johnson", Age = 35 }
+        };
+
+        return View(data);
+        //return View();
     }
 
     [HttpGet]
@@ -49,4 +57,18 @@ public class HomeController : Controller
         createEmployeeRequests.Add(request);
         return CommonResponse<string>.CreateHappyResponse(message: "Success");
     }
+
+    // Controller Method
+    public ActionResult GetData()
+    {
+        var data = new List<MyModel>
+        {
+            new MyModel { Id = 1, Name = "John Doe", Age = 30 },
+            new MyModel { Id = 2, Name = "Jane Smith", Age = 25 },
+            new MyModel { Id = 3, Name = "Sam Johnson", Age = 35 }
+        };
+
+        return View(data);
+    }
+
 }
