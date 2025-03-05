@@ -1,12 +1,25 @@
-﻿@using XoomCore.Application.RequestModels
-
-@{
+﻿@{
 	ViewData["Title"] = "Home Page";
 }
 
 <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary" id="registerBtn" data-mdb-modal-init data-mdb-target="#registerModal">
 	Registration Form Modal
 </button>
+
+<table class="table table-bordered table-striped">
+	<thead class="table-dark">
+		<tr>
+			<th>#</th>
+			<th>Birth Date</th>
+			<th>City</th>
+			<th>Email</th>
+			<th>First Name</th>
+			<th>Last Name</th>
+			<th>Phone</th>
+		</tr>
+	</thead>
+	<tbody id="dataContainer"></tbody>
+</table>
 
 <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog d-flex justify-content-center">
@@ -70,97 +83,6 @@
 	</div>
 </div>
 
-@model List<MyModel>
-
-@* <!DOCTYPE html> *@
-@* <html lang="en"> *@
-@* <head> *@
-@* 	<meta charset="UTF-8"> *@
-@* 	<meta name="viewport" content="width=device-width, initial-scale=1.0"> *@
-@* 	<title>Bootstrap Table Example</title> *@
-	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-@* </head> *@
-@* <body> *@
-	<div class="container">
-		<h2 class="my-4">User Data</h2>
-		<table class="table table-striped">
-			<thead>
-				<tr>
-					<th>ID</th>
-					<th>Name</th>
-					<th>Age</th>
-				</tr>
-			</thead>
-			<tbody>
-				@foreach (var item in Model)
-				{
-					<tr>
-						<td>@item.Id</td>
-						<td>@item.Name</td>
-						<td>@item.Age</td>
-					</tr>
-				}
-			</tbody>
-		</table>
-	</div>
-
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-@* </body> *@
-@* </html> *@
-
-
-@* <form id="registrationForm" class="g-3 needs-validation" novalidate> *@
-
-@* 	<div class="col-md-4"> *@
-@* 		<label for="textFirstName" class="form-label">First Name</label> *@
-@* 		<input type="text" class="form-control" id="textFirstName" required> *@
-@* 	</div> *@
-
-@* 	<div class="col-md-4"> *@
-@* 		<label for="textLastName" class="form-label">Last Name</label> *@
-@* 		<input type="text" class="form-control" id="textLastName" required> *@
-@* 	</div> *@
-
-@* 	<div class="col-md-4"> *@
-@* 		<label for="textBirthDate" class="form-label">Date of Birth</label> *@
-@* 		<input type="date" class="form-control" id="textBirthDate" required> *@
-@* 	</div> *@
-
-@* 	<div class="col-md-4"> *@
-@* 		<label for="textEmail" class="form-label">Email</label> *@
-@* 		<input type="text" class="form-control" id="textEmail" required> *@
-@* 	</div> *@
-
-@* 	<div class="col-md-4"> *@
-@* 		<label for="numPhone" class="form-label">Phone</label> *@
-@* 		<input type="number" class="form-control" id="numPhone" required> *@
-@* 	</div> *@
-
-@* 	<div class="col-md-4"> *@
-@* 		<label for="textCity" class="form-label">City</label> *@
-@* 		<select class="form-select" id="textCity" required> *@
-@* 			<option selected disabled value="">Choose...</option> *@
-@* 			<option>Dhaka</option> *@
-@* 			<option>Chittagon</option> *@
-@* 			<option>Khulna</option> *@
-@* 			<option>Rajshahi</option> *@
-@* 			<option>Sylhet</option> *@
-@* 		</select> *@
-@* 		<div class="invalid-feedback"> *@
-@* 			Please select a valid state. *@
-@* 		</div> *@
-@* 	</div> *@
-
-@* 	<br /> *@
-
-@* 	<div class="col-12"> *@
-@* 		<button id="click_button" class="btn btn-primary" type="submit">Submit Form</button> *@
-@* 	</div> *@
-
-@* </form> *@
-
 @section scripts {
 
 	<script>
@@ -171,7 +93,7 @@
 		$("#registerBtn").click(function(e){
 			e.preventDefault();
 
-			$('#registerModal').modal('show')
+			$('#registerModal').modal('show');
 
 		});
 
@@ -221,7 +143,10 @@
 						//showToast(response.responseCode, response.messageType, response.message);
 					}
 					else {
-						alert("Submitted")
+						//alert("Submitted")
+                        $('#registerModal').modal('hide');
+						getEmployeeData();
+
 					}
 				} catch (error) {
 					console.error(error);
@@ -229,6 +154,62 @@
 
 			};
 		});
+
+		getEmployeeData();
+		async function getEmployeeData(){
+			console.log("getEmployeeData() called");
+
+			const url = "/GetEmployeeList";
+
+				try {
+
+					const options = {
+						method: "POST",
+						headers: {
+							'Content-Type': 'application/json'
+						}
+					};
+					
+					const response = await fetch(url, options);
+
+					if (!response.ok) {
+						throw new Error(`HTTP error! status: ${response.status}`);
+					}
+					const result = await response.json();
+					//return result;
+					console.log("result",result);
+
+					displayData(result);
+					if (!result.isValid) {
+						alert("Error")
+						//showToast(response.responseCode, response.messageType, response.message);
+					}
+					else {
+						//alert("Submitted")
+					}
+				} catch (error) {
+					console.error(error);
+				}
+		}
+		function displayData(responseData) {
+			const container = document.getElementById("dataContainer");
+			let htmlContent = "";
+
+			responseData.data.forEach((item, index) => {
+				htmlContent += `<tr>
+									<td>${index + 1}</td>
+									<td>${item.birthDate}</td>
+									<td>${item.city}</td>
+									<td>${item.email}</td>
+									<td>${item.firstName}</td>
+									<td>${item.lastName}</td>
+									<td>${item.phone}</td>
+								</tr>`;
+			});
+
+			container.innerHTML = htmlContent;
+		}
+
 
 		$("#click_button").click(function(){
 			console.log("Button Clicked");
