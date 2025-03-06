@@ -11,6 +11,7 @@ public class HomeController : Controller
     private readonly ILogger<HomeController> _logger;
     private readonly ISessionManager _sessionManager;
     public static List<CreateEmployeeRequest> createEmployeeRequests = new List<CreateEmployeeRequest>();
+    public static List<UpdateEmployeeRequest> updateEmployeeRequests = new List<UpdateEmployeeRequest>();
     public HomeController(ILogger<HomeController> logger, ISessionManager sessionManager)
     {
         _logger = logger;
@@ -21,15 +22,7 @@ public class HomeController : Controller
     //[MustHavePermission(SubMenuKey: "Home", Controller: "Home", Action: "Index")]
     public IActionResult Index()
     {
-        var data = new List<MyModel>
-        {
-            new MyModel { Id = 1, Name = "John Doe", Age = 30 },
-            new MyModel { Id = 2, Name = "Jane Smith", Age = 25 },
-            new MyModel { Id = 3, Name = "Sam Johnson", Age = 35 }
-        };
-
-        return View(data);
-        //return View();
+        return View();
     }
 
     [HttpGet]
@@ -46,29 +39,35 @@ public class HomeController : Controller
     }
     [Route("CreateEmployeeRequest")]
     [HttpPost]
-    public async Task<CommonResponse<string>> CreateEmployeeRequest([FromBody] CreateEmployeeRequest request)
+    public async Task<CommonResponse<string>> CreateEmployeeRequest([FromBody] CreateEmployeeRequest createRequest)
     {
-        _logger.LogInformation("CreateEmployeeRequest by : {email}", request.Email);
+        _logger.LogInformation("CreateEmployeeRequest by : {email}", createRequest.Email);
         if (!ModelState.IsValid)
         {
             string errorMessage = ModelState.Values.SelectMany(v => v.Errors).FirstOrDefault()?.ErrorMessage;
             return CommonResponse<string>.CreateWarningResponse(message: errorMessage);
         }
-        createEmployeeRequests.Add(request);
+        createEmployeeRequests.Add(createRequest);
         return CommonResponse<string>.CreateHappyResponse(message: "Success");
     }
 
-    // Controller Method
-    public ActionResult GetData()
+    [Route("UpdateEmployeeList")]
+    [HttpPost]
+    public async Task<CommonResponse<List<UpdateEmployeeRequest>>> UpdateEmployeeList()
     {
-        var data = new List<MyModel>
-        {
-            new MyModel { Id = 1, Name = "John Doe", Age = 30 },
-            new MyModel { Id = 2, Name = "Jane Smith", Age = 25 },
-            new MyModel { Id = 3, Name = "Sam Johnson", Age = 35 }
-        };
-
-        return View(data);
+        return CommonResponse<List<UpdateEmployeeRequest>>.CreateHappyResponse(updateEmployeeRequests);
     }
-
+    [Route("UpdateEmployeeRequest")]
+    [HttpPost]
+    public async Task<CommonResponse<string>> UpdateEmployeeRequest([FromBody] UpdateEmployeeRequest updateRequest)
+    {
+        _logger.LogInformation("UpdateEmployeeRequest by : {email}", updateRequest.Email);
+        if (!ModelState.IsValid)
+        {
+            string errorMessage = ModelState.Values.SelectMany(v => v.Errors).FirstOrDefault()?.ErrorMessage;
+            return CommonResponse<string>.CreateWarningResponse(message: errorMessage);
+        }
+        updateEmployeeRequests.Add(updateRequest);
+        return CommonResponse<string>.CreateHappyResponse(message: "Success");
+    }
 }
