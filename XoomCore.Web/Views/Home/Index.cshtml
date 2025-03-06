@@ -32,51 +32,51 @@
 				<form id="registrationForm" class="g-3 needs-validation" novalidate>
 
 					<div class="form-outline mb-3">
-				 		<label for="textFirstName" class="form-label">First Name</label>
-				 		<input type="text" class="form-control" id="textFirstName" required>
-				 	</div>
+						<label for="textFirstName" class="form-label">First Name</label>
+						<input type="text" class="form-control" id="textFirstName" required>
+					</div>
 
 					<div class="form-outline mb-3">
-				 		<label for="textLastName" class="form-label">Last Name</label>
-				 		<input type="text" class="form-control" id="textLastName" required>
-				 	</div>
+						<label for="textLastName" class="form-label">Last Name</label>
+						<input type="text" class="form-control" id="textLastName" required>
+					</div>
 
 					<div class="form-outline mb-3">
-				 		<label for="textBirthDate" class="form-label">Date of Birth</label>
-				 		<input type="date" class="form-control" id="textBirthDate" required>
-				 	</div>
+						<label for="textBirthDate" class="form-label">Date of Birth</label>
+						<input type="date" class="form-control" id="textBirthDate" required>
+					</div>
 
 					<div class="form-outline mb-3">
-				 		<label for="textEmail" class="form-label">Email</label>
-				 		<input type="text" class="form-control" id="textEmail" required>
-				 	</div>
+						<label for="textEmail" class="form-label">Email</label>
+						<input type="text" class="form-control" id="textEmail" required>
+					</div>
 
 					<div class="form-outline mb-3">
-				 		<label for="numPhone" class="form-label">Phone</label>
-				 		<input type="number" class="form-control" id="numPhone" required>
-				 	</div>
+						<label for="numPhone" class="form-label">Phone</label>
+						<input type="number" class="form-control" id="numPhone" required>
+					</div>
 
 					<div class="form-outline mb-3">
-				 		<label for="textCity" class="form-label">City</label>
-				 		<select class="form-select" id="textCity" required>
-				 			<option selected disabled value="">Choose...</option>
-				 			<option>Dhaka</option>
-				 			<option>Chittagon</option>
-				 			<option>Khulna</option>
-				 			<option>Rajshahi</option>
-				 			<option>Sylhet</option>
-				 		</select>
-				 		@*<div class="invalid-feedback">
+						<label for="textCity" class="form-label">City</label>
+						<select class="form-select" id="textCity" required>
+							<option selected disabled value="">Choose...</option>
+							<option>Dhaka</option>
+							<option>Chittagon</option>
+							<option>Khulna</option>
+							<option>Rajshahi</option>
+							<option>Sylhet</option>
+						</select>
+						@*<div class="invalid-feedback">
 				 			Please select a valid state
 				 		</div>*@
-				 	</div>
+					</div>
 
-				 	<br />
+					<br />
 
-				 	<div class="col-12">
-				 		<button id="click_button" class="btn btn-primary" type="submit">Submit Form</button>
-				 	</div>
-				 </form>
+					<div class="col-12">
+						<button id="click_button" class="btn btn-primary" type="submit">Submit Form</button>
+					</div>
+				</form>
 			</div>
 		</div>
 	</div>
@@ -91,7 +91,8 @@
 
 		$("#registerBtn").click(function(e){
 			e.preventDefault();
-
+				$("#registrationForm").trigger("reset");
+		$("#registrationForm").removeClass('was-validated');
 			$('#registerModal').modal('show');
 
 		});
@@ -144,7 +145,7 @@
 					}
 					else {
 						//alert("Submitted")
-                        $('#registerModal').modal('hide');
+						$('#registerModal').modal('hide');
 						getEmployeeData();
 
 					}
@@ -169,7 +170,7 @@
 							'Content-Type': 'application/json'
 						}
 					};
-					
+
 					const response = await fetch(url, options);
 
 					if (!response.ok) {
@@ -191,27 +192,70 @@
 					console.error(error);
 				}
 		}
-			function displayData(responseData) {
-			const container = document.getElementById("dataContainer");
-			let htmlContent = "";
+		function displayData(responseData) 
+		{
+			$("#dataContainer").empty();
 
-			responseData.data.forEach((item, index) => {
-				htmlContent += `<tr>
-									<td>${index + 1}</td>
-									<td>${item.birthDate}</td>
-									<td>${item.city}</td>
-									<td>${item.email}</td>
-									<td>${item.firstName}</td>
-									<td>${item.lastName}</td>
-									<td>${item.phone}</td>
-									<td>
-										<button class="btn btn-primary btn-sm" onclick="updateRow(${index})">Update</button>
-										<button class="btn btn-danger btn-sm" onclick="deleteRow(${index})">Delete</button>
-									</td>
-								</tr>`;
+			$.each(responseData.data, function (index, value) {
+				var slnocell = $("<td>").attr("scope", "row").append(index + 1);
+				var firstName = $("<td>").append(value.firstName);
+				var lastName = $("<td>").append(value.lastName);
+				var email = $("<td>").append(value.email);
+
+				var iconcell = $("<td>");
+				var icondiv = $("<div>").attr("class", "d-flex justify-content-center").appendTo(iconcell);
+				var editIcon = $("<i>").attr({
+					"class": "e-btn bi-pen-fill text-white bg-warning rounded-circle shadow",
+					"style": "font-size: 18px; padding: 10px; cursor: pointer; border: 2px solid white;",
+					"title": "Edit Company"
+				}).appendTo(icondiv);
+				var deleteIcon = $("<i>").attr({
+					"class": "e-btn bi-trash-fill text-white bg-danger rounded-circle shadow",
+					"style": "font-size: 18px; padding: 10px; cursor: pointer; border: 2px solid white;",
+					"title": "Delete Company"
+				}).appendTo(icondiv);
+
+
+				$("<tr>").attr("class", "text-center").append(slnocell, firstName, lastName, email, iconcell).appendTo("#dataContainer");
+
+				(function ($) {
+					editIcon.on("click", function (e) {
+						e.preventDefault();
+						console.log("edit",value)
+						$("#registerModal").modal("show");
+						//$("#textFirstName").data("email", value.email);
+						$("#textFirstName").val(value.firstName);
+						// $("#ls_edit_company_name").val(value.CompanyName);
+						// $("#ls_edit_company_location").val(value.CompanyLocation);
+						// $("#ls_edit_company_status").val(value.CompanyActiveStatus);
+					});
+
+					deleteIcon.on("click", function (e) {
+
+						e.preventDefault();
+						$("#ls_delete_company_modal").modal("show");
+						$("#ls_delete_company_id_hidden").data("companyId", value.CompanyId);
+					});
+
+				})(jQuery);
+
+
 			});
-
-			container.innerHTML = htmlContent;
+			// responseData.data.forEach((item, index) => {
+			// 	htmlContent += `<tr>
+			// 						<td>${index + 1}</td>
+			// 						<td>${item.birthDate}</td>
+			// 						<td>${item.city}</td>
+			// 						<td>${item.email}</td>
+			// 						<td>${item.firstName}</td>
+			// 						<td>${item.lastName}</td>
+			// 						<td>${item.phone}</td>
+			// 						<td>
+			// 							<button class="btn btn-primary btn-sm" onclick="updateRow(${index})">Update</button>
+			// 							<button class="btn btn-danger btn-sm" onclick="deleteRow(${index})">Delete</button>
+			// 						</td>
+			// 					</tr>`;
+			// });
 		}
 
 		// updateEmployeeData();
