@@ -255,42 +255,6 @@
 				}
 		}
 
-		//updateEmployeeData();
-		async function updateEmployeeData(){
-			console.log("updateEmployeeData() called");
-
-			const url = "/UpdateEmployeeList";
-
-				try {
-
-					const options = {
-						method: "POST",
-						headers: {
-							'Content-Type': 'application/json'
-						}
-					};
-
-					const response = await fetch(url, options);
-
-					if (!response.ok) {
-						throw new Error(`HTTP error! status: ${response.status}`);
-					}
-					const result = await response.json();
-					//return result;
-					console.log("result",result);
-
-					displayData(result);
-					if (!result.isValid) {
-						alert("Error")
-						//showToast(response.responseCode, response.messageType, response.message);
-					}
-					else {
-						//alert("Submitted")
-					}
-				} catch (error) {
-					console.error(error);
-				}
-		}
 
 		function displayData(responseData)
 		{
@@ -327,6 +291,7 @@
 						console.log("edit",value)
 						$("#updateModal").modal("show");
 
+						$("#textFirstName2").data("EmployeeId",value.id);
 						$("#textFirstName2").val(value.firstName);
 						$("#textLastName2").val(value.lastName);
 						$("#textBirthDate2").val(value.birthDate);
@@ -344,6 +309,7 @@
 						{
 
 							let createRequest={
+                                Id:$("#textFirstName2").data("EmployeeId"),
 								FirstName:$("#textFirstName2").val(),
 								LastName:$("#textLastName2").val(),
 								BirthDate:$("#textBirthDate2").val(),
@@ -383,14 +349,14 @@
 								else {
 									//alert("Submitted")
 									$('#updateModal').modal('hide');
-									updateEmployeeData();
+									getEmployeeData();
 								}
 							} catch (error) {
 								console.error(error);
 							}
 
 						};
-		});
+					});
 					});
 
 					deleteIcon.on("click", function (e) {

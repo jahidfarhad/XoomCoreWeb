@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using XoomCore.Application.RequestModels;
 using XoomCore.Application.ResponseModels.Shared;
+using XoomCore.Core.Entities;
 using XoomCore.Services.SessionControl;
 
 namespace XoomCore.Web.Controllers;
@@ -10,8 +11,9 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly ISessionManager _sessionManager;
-    public static List<CreateEmployeeRequest> createEmployeeRequests = new List<CreateEmployeeRequest>();
-    public static List<UpdateEmployeeRequest> updateEmployeeRequests = new List<UpdateEmployeeRequest>();
+    public static List<Employee> employeeList = new List<Employee>();
+    //public static List<CreateEmployeeRequest> createEmployeeRequests = new List<CreateEmployeeRequest>();
+    //public static List<UpdateEmployeeRequest> updateEmployeeRequests = new List<UpdateEmployeeRequest>();
     public HomeController(ILogger<HomeController> logger, ISessionManager sessionManager)
     {
         _logger = logger;
@@ -33,9 +35,9 @@ public class HomeController : Controller
     }
     [Route("GetEmployeeList")]
     [HttpPost]
-    public async Task<CommonResponse<List<CreateEmployeeRequest>>> GetEmployeeList()
+    public async Task<CommonResponse<List<Employee>>> GetEmployeeList()
     {
-        return CommonResponse<List<CreateEmployeeRequest>>.CreateHappyResponse(createEmployeeRequests);
+        return CommonResponse<List<Employee>>.CreateHappyResponse(employeeList);
     }
     [Route("CreateEmployeeRequest")]
     [HttpPost]
@@ -47,16 +49,22 @@ public class HomeController : Controller
             string errorMessage = ModelState.Values.SelectMany(v => v.Errors).FirstOrDefault()?.ErrorMessage;
             return CommonResponse<string>.CreateWarningResponse(message: errorMessage);
         }
-        createEmployeeRequests.Add(createRequest);
+        Employee employee = new Employee
+        {
+            Id = employeeList.Count + 1,
+            FirstName = createRequest.FirstName,
+            LastName = createRequest.LastName,
+            BirthDate = createRequest.BirthDate,
+            Email = createRequest.Email,
+            Phone = createRequest.Phone,
+            City = createRequest.City,
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now
+        };
+        employeeList.Add(employee);
         return CommonResponse<string>.CreateHappyResponse(message: "Success");
     }
 
-    [Route("UpdateEmployeeList")]
-    [HttpPost]
-    public async Task<CommonResponse<List<UpdateEmployeeRequest>>> UpdateEmployeeList()
-    {
-        return CommonResponse<List<UpdateEmployeeRequest>>.CreateHappyResponse(updateEmployeeRequests);
-    }
     [Route("UpdateEmployeeRequest")]
     [HttpPost]
     public async Task<CommonResponse<string>> UpdateEmployeeRequest([FromBody] UpdateEmployeeRequest updateRequest)
@@ -67,7 +75,18 @@ public class HomeController : Controller
             string errorMessage = ModelState.Values.SelectMany(v => v.Errors).FirstOrDefault()?.ErrorMessage;
             return CommonResponse<string>.CreateWarningResponse(message: errorMessage);
         }
-        updateEmployeeRequests.Add(updateRequest);
+        Employee employee = employeeList.FirstOrDefault(x => x.Id == updateRequest.Id);
+        if (employee == null)
+        {
+            return CommonResponse<string>.CreateUnhappyResponse(404, "Employee not found");
+        }
+        employee.FirstName = updateRequest.FirstName;
+        employee.LastName = updateRequest.LastName;
+        employee.Email = updateRequest.Email;
+        employee.Phone = updateRequest.Phone;
+        employee.City = updateRequest.City;
+        employee.UpdatedAt = DateTime.Now;
+
         return CommonResponse<string>.CreateHappyResponse(message: "Success");
     }
 }
