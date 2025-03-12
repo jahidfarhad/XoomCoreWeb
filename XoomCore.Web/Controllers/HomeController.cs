@@ -99,6 +99,7 @@ public class HomeController : Controller
     public async Task<CommonResponse<List<Employee>>> GetEmployeeList()
     //public async Task<IActionResult> GetEmployeeList()
     {
+        Task.Delay(5000).Wait(); // Simulate delay
         List<Employee> employees = new List<Employee>();
 
         // SQL Select Query to retrieve employees
