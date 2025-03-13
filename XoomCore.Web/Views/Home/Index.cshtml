@@ -1,10 +1,4 @@
-﻿@using XoomCore.Core.Entities
-
-@{
-    Layout = "_Layout"; // Adjust if you have a layout file.
-}
-
-@{
+﻿@{
 	ViewData["Title"] = "Home Page";
 }
 
@@ -12,7 +6,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
 <button type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary" id="registerBtn" data-mdb-modal-init data-mdb-target="#registerModal">
-	Registration Form Modal
+	Registration Form
 </button>
 
 <div class="d-flex" style="height: 20px;">
@@ -24,17 +18,15 @@
 			<th class="text-center">SL</th>
 			<th class ="text-center">First Name</th>
 			<th class="text-center">Last Name</th>
-			<th class="text-center">Birth Date</th>
+			<th class="text-center">Date of Birth</th>
 			<th class="text-center">Email</th>
 			<th class="text-center">Phone</th>
 			<th class="text-center">City</th>
-			<th class="text-center">Buttons</th>
+			@* <th class="text-center">Gender</th> *@
+			<th class="text-center">Actions</th>
 
 		</tr>
 	</thead>
-	<tbody>
-		<!-- Data will be inserted here by JavaScript -->
-	</tbody>
 	<tbody id="dataContainer"></tbody>
 </table>
 
@@ -45,32 +37,47 @@
 				<h5 class="modal-title" id="exampleModalLabel">Registration Form</h5>
 				<button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
 			</div>
-			<div class="modal-body p-4">
+			<div class="modal-body p-4" style="max-height: 500px; overflow-y: auto;">
 				<form id="registrationForm" class="g-3 needs-validation" novalidate>
 
 					<div class="form-outline mb-3">
 						<label for="textFirstName" class="form-label">First Name</label>
 						<input type="text" class="form-control" id="textFirstName" required>
+						<div class="invalid-feedback">
+							Please enter a First Name
+						</div>
 					</div>
 
 					<div class="form-outline mb-3">
 						<label for="textLastName" class="form-label">Last Name</label>
 						<input type="text" class="form-control" id="textLastName" required>
+						<div class="invalid-feedback">
+							Please enter a Last Name
+						</div>
 					</div>
 
 					<div class="form-outline mb-3">
 						<label for="textBirthDate" class="form-label">Date of Birth</label>
 						<input type="date" class="form-control" id="textBirthDate" required>
+						<div class="invalid-feedback">
+							Please enter a Date of Birth
+						</div>
 					</div>
 
 					<div class="form-outline mb-3">
 						<label for="textEmail" class="form-label">Email</label>
-						<input type="text" class="form-control" id="textEmail" required>
+						<input type="email" class="form-control" id="textEmail" required>
+						<div class="invalid-feedback">
+							Please enter a valid Email Address
+						</div>
 					</div>
 
 					<div class="form-outline mb-3">
 						<label for="numPhone" class="form-label">Phone</label>
-						<input type="number" class="form-control" id="numPhone" required>
+						<input type="tel" class="form-control" id="numPhone" pattern="^\d{11}$" required>
+						<div class="invalid-feedback">
+							Please enter a valid Phone Number
+						</div>
 					</div>
 
 					<div class="form-outline mb-3">
@@ -83,10 +90,35 @@
 							<option>Rajshahi</option>
 							<option>Sylhet</option>
 						</select>
-						@*<div class="invalid-feedback">
-				 			Please select a valid state
-				 		</div>*@
+						<div class="invalid-feedback">
+				 			Please select a valid City
+				 		</div>
 					</div>
+
+					@* <div class="form-outline mb-3"> *@
+					@* 	<label class="form-label">Gender</label> *@
+					@* 	<div class="form-check"> *@
+					@* 		<input class="form-check-input" type="radio" name="gender" id="genderMale" value="Male" required> *@
+					@* 		<label class="form-check-label" for="genderMale"> *@
+					@* 			Male *@
+					@* 		</label> *@
+					@* 	</div> *@
+					@* 	<div class="form-check"> *@
+					@* 		<input class="form-check-input" type="radio" name="gender" id="genderFemale" value="Female" required> *@
+					@* 		<label class="form-check-label" for="genderFemale"> *@
+					@* 			Female *@
+					@* 		</label> *@
+					@* 	</div> *@
+					@* 	<div class="form-check"> *@
+					@* 		<input class="form-check-input" type="radio" name="gender" id="genderOther" value="Other"> *@
+					@* 		<label class="form-check-label" for="genderOther"> *@
+					@* 			Other *@
+					@* 		</label> *@
+					@* 	</div> *@
+					@* 	<div class="invalid-feedback"> *@
+					@* 		Please select a gender *@
+					@* 	</div> *@
+					@* </div> *@
 
 					<br />
 
@@ -144,9 +176,6 @@
 							<option>Rajshahi</option>
 							<option>Sylhet</option>
 						</select>
-						@*<div class="invalid-feedback">
-				 			Please select a valid state
-				 		</div>*@
 					</div>
 
 					<br />
@@ -160,38 +189,6 @@
 	</div>
 </div>
 
-@* <script> *@
-@* 	$(document).ready(function() { *@
-@* 		// Fetch employee data from the API *@
-@* 		$.ajax({ *@
-@* 			url: "/GetEmployeeList", // Endpoint to fetch the data *@
-@* 			method: "POST", *@
-@* 			success: function(data) { *@
-@* 				console.log("Employee data", data); *@
-@* 				var employeeTable = $('#employeeTable tbody'); *@
-@* 				employeeTable.empty(); // Clear any existing data *@
-
-@* 				// Loop through the data and append to the table *@
-@* 				data.forEach(function(employee) { *@
-@* 					var row = `<tr> *@
-@* 						<td>${employee.id}</td> *@
-@* 						<td>${employee.firstName}</td> *@
-@* 						<td>${employee.lastName}</td> *@
-@* 						<td>${employee.birthDate}</td> *@
-@* 						<td>${employee.email}</td> *@
-@* 						<td>${employee.phone}</td> *@
-@* 						<td>${employee.city}</td> *@
-@* 					</tr>`; *@
-@* 					employeeTable.append(row); *@
-@* 				}); *@
-@* 			}, *@
-@* 			error: function(error) { *@
-@* 				console.error("Error fetching employee data", error); *@
-@* 			} *@
-@* 		}); *@
-@* 	}); *@
-@* </script> *@
-
 @section scripts {
 	<script>
 		$(document).ready(function () {
@@ -201,7 +198,7 @@
 		document.querySelector('.btn-close').addEventListener('click', function() {
 			$('#registerModal').modal('hide');
 		});
-
+		
 		$("#registerBtn").click(function(e){
 			e.preventDefault();
 			$("#registrationForm").trigger("reset");
@@ -294,10 +291,10 @@
 					displayData(result);
 					if (!result.isValid) {
 						alert("Error")
-						showToast(response.responseCode, response.messageType, response.message);
+						//showToast(response.responseCode, response.messageType, response.message);
 					}
 					else {
-						alert("Submitted")
+						//alert("Submitted")
 					}
 				} catch (error) {
 					console.error(error);

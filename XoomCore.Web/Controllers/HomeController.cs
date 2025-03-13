@@ -97,10 +97,10 @@ public class HomeController : Controller
     [Route("GetEmployeeList")]
     [HttpPost]
     public async Task<CommonResponse<List<Employee>>> GetEmployeeList()
-    //public async Task<IActionResult> GetEmployeeList()
     {
         Task.Delay(5000).Wait(); // Simulate delay
-        List<Employee> employees = new List<Employee>();
+
+        List<Employee> employeeList = new List<Employee>();
 
         // SQL Select Query to retrieve employees
         string query = "SELECT Id, FirstName, LastName, BirthDate, Email, Phone, City FROM EmployeesTable";
@@ -122,13 +122,13 @@ public class HomeController : Controller
                                 Id = reader.GetInt32(0),
                                 FirstName = reader.GetString(1),
                                 LastName = reader.GetString(2),
-                                //BirthDate = reader.GetString(3),
+                                BirthDate = reader.GetString(3),
                                 Email = reader.GetString(4),
                                 Phone = reader.GetString(5),
                                 City = reader.GetString(6)
                             };
 
-                            employees.Add(employee);
+                            employeeList.Add(employee);
                         }
                     }
                 }
@@ -139,16 +139,15 @@ public class HomeController : Controller
                 // Handle error appropriately here
             }
         }
-        return CommonResponse<List<Employee>>.CreateHappyResponse(employees);
-        //return Json(employees); // Return data as JSON
+        return CommonResponse<List<Employee>>.CreateHappyResponse(employeeList);
     }
-
-
 
     [Route("CreateEmployeeRequest")]
     [HttpPost]
     public async Task<CommonResponse<string>> CreateEmployeeRequest([FromBody] CreateEmployeeRequest createRequest)
     {
+        Task.Delay(5000).Wait(); // Simulate delay
+
         _logger.LogInformation("CreateEmployeeRequest by : {email}", createRequest.Email);
 
         if (!ModelState.IsValid)
@@ -199,56 +198,58 @@ public class HomeController : Controller
         }
     }
 
-    //[Route("UpdateEmployeeRequest")]
-    //[HttpPost]
-    //public async Task<CommonResponse<string>> UpdateEmployeeRequest([FromBody] UpdateEmployeeRequest updateRequest)
-    //{
-    //    _logger.LogInformation("UpdateEmployeeRequest by : {email}", updateRequest.Email);
+    [Route("UpdateEmployeeRequest")]
+    [HttpPost]
+    public async Task<CommonResponse<string>> UpdateEmployeeRequest([FromBody] UpdateEmployeeRequest updateRequest)
+    {
+        Task.Delay(5000).Wait(); // Simulate delay
 
-    //    if (!ModelState.IsValid)
-    //    {
-    //        string errorMessage = ModelState.Values.SelectMany(v => v.Errors).FirstOrDefault()?.ErrorMessage;
-    //        return CommonResponse<string>.CreateWarningResponse(message: errorMessage);
-    //    }
+        _logger.LogInformation("UpdateEmployeeRequest by : {email}", updateRequest.Email);
 
-    //    // SQL Update Query
-    //    string query = "UPDATE EmployeesTable SET FirstName = @FirstName, LastName = @LastName, Email = @Email, " +
-    //                   "Phone = @Phone, City = @City, UpdatedAt = @UpdatedAt WHERE Id = @Id";
+        if (!ModelState.IsValid)
+        {
+            string errorMessage = ModelState.Values.SelectMany(v => v.Errors).FirstOrDefault()?.ErrorMessage;
+            return CommonResponse<string>.CreateWarningResponse(message: errorMessage);
+        }
 
-    //    // Use SqlConnection and SqlCommand to execute the query
-    //    using (SqlConnection connection = new SqlConnection("Data Source=DESKTOP-21494GD;Initial Catalog=EmployeesDB;Integrated Security=True;;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=True;User Id=sa;password=12345"))
-    //    {
-    //        try
-    //        {
-    //            await connection.OpenAsync();
+        // SQL Update Query
+        string query = "UPDATE EmployeesTable SET FirstName = @FirstName, LastName = @LastName, Email = @Email, " +
+                       "Phone = @Phone, City = @City, UpdatedAt = @UpdatedAt WHERE Id = @Id";
 
-    //            using (var command = new SqlCommand(query, connection))
-    //            {
-    //                command.Parameters.AddWithValue("@FirstName", updateRequest.FirstName);
-    //                command.Parameters.AddWithValue("@LastName", updateRequest.LastName);
-    //                command.Parameters.AddWithValue("@Email", updateRequest.Email);
-    //                command.Parameters.AddWithValue("@Phone", updateRequest.Phone);
-    //                command.Parameters.AddWithValue("@City", updateRequest.City);
-    //                command.Parameters.AddWithValue("@UpdatedAt", DateTime.Now);
-    //                command.Parameters.AddWithValue("@Id", updateRequest.Id);
+        // Use SqlConnection and SqlCommand to execute the query
+        using (SqlConnection connection = new SqlConnection("Data Source=DESKTOP-21494GD;Initial Catalog=EmployeesDB;Integrated Security=True;;Trusted_Connection=True;TrustServerCertificate=True;MultipleActiveResultSets=True;User Id=sa;password=12345"))
+        {
+            try
+            {
+                await connection.OpenAsync();
 
-    //                int rowsAffected = await command.ExecuteNonQueryAsync();
+                using (var command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@FirstName", updateRequest.FirstName);
+                    command.Parameters.AddWithValue("@LastName", updateRequest.LastName);
+                    command.Parameters.AddWithValue("@Email", updateRequest.Email);
+                    command.Parameters.AddWithValue("@Phone", updateRequest.Phone);
+                    command.Parameters.AddWithValue("@City", updateRequest.City);
+                    command.Parameters.AddWithValue("@UpdatedAt", DateTime.Now);
+                    command.Parameters.AddWithValue("@Id", updateRequest.Id);
 
-    //                if (rowsAffected > 0)
-    //                {
-    //                    return CommonResponse<string>.CreateHappyResponse(message: "Employee updated successfully");
-    //                }
-    //                else
-    //                {
-    //                    return CommonResponse<string>.CreateUnhappyResponse(404, "Employee not found");
-    //                }
-    //            }
-    //        }
-    //        catch (Exception ex)
-    //        {
-    //            _logger.LogError(ex, "Error updating employee");
-    //            return CommonResponse<string>.CreateWarningResponse(message: "An error occurred");
-    //        }
-    //    }
-    //}
+                    int rowsAffected = await command.ExecuteNonQueryAsync();
+
+                    if (rowsAffected > 0)
+                    {
+                        return CommonResponse<string>.CreateHappyResponse(message: "Employee updated successfully");
+                    }
+                    else
+                    {
+                        return CommonResponse<string>.CreateUnhappyResponse(404, "Employee not found");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating employee");
+                return CommonResponse<string>.CreateWarningResponse(message: "An error occurred");
+            }
+        }
+    }
 }
